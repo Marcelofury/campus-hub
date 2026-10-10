@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { after, before, describe, it } from "node:test";
-import app from "../server/index.js";
+
+process.env.NODE_ENV = "test";
+const { default: app } = await import("../server/index.js");
 
 let server;
 let baseUrl;
