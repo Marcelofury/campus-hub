@@ -1,0 +1,23 @@
+import { Router } from "express";
+import * as controller from "../controllers/api.controller.js";
+import { requireResource, requireRole } from "../middleware/auth.middleware.js";
+
+const router = Router();
+router.get("/health", controller.health);
+router.post("/auth/login", controller.authLogin);
+router.get("/auth/me", requireRole(controller.roles), controller.currentUser);
+router.get("/announcements", controller.listResource("announcements"));
+router.post("/announcements", requireRole(["admin", "super_admin"]), controller.createAnnouncement);
+router.get("/clubs", controller.listResource("clubs"));
+router.post("/clubs", requireRole(["admin", "super_admin"]), controller.createClub);
+router.patch("/clubs/:id", requireRole(["admin", "super_admin"]), requireResource("clubs"), controller.patchClub);
+router.delete("/clubs/:id", requireRole(["super_admin"]), requireResource("clubs"), controller.deleteClub);
+router.get("/events", controller.listResource("events"));
+router.post("/events", requireRole(["admin", "super_admin"]), controller.createEvent);
+router.post("/events/:id/register", requireRole(controller.roles), requireResource("events"), controller.registerForEvent);
+router.get("/groups", controller.listResource("groups"));
+router.post("/groups", requireRole(controller.roles), controller.createGroup);
+router.get("/groups/:id/messages", requireRole(controller.roles), requireResource("groups"), controller.listMessages);
+router.post("/groups/:id/messages", requireRole(controller.roles), requireResource("groups"), controller.sendMessage);
+router.get("/admin/summary", requireRole(["admin", "super_admin"]), controller.adminSummary);
+export default router;
