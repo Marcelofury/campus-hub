@@ -8,7 +8,7 @@
     "dev:client": "vite frontend",
     "dev:server": "node --watch backend/src/app.js",
     "build": "vite build frontend",
-    "test": "node --test test/api.test.js",
+    "test": "node --test backend/tests/api.test.js",
     "start": "node backend/src/app.js",
     "lint": "eslint ."
   },
