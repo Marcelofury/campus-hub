@@ -15,14 +15,15 @@ low-bandwidth use are product requirements, not optional polish.
 
 ## Current architecture
 
-- React, Vite and TypeScript in `src/`
-- Node.js and Express REST API in `server/`
-- Local JSON persistence in `server/data/local.json` for development
-- Supabase is planned, but is not required for current local development
+- React, Vite and TypeScript in `frontend/`
+- Node.js and Express REST API in `backend/src/`
+- Backend MVC layers: `routes/`, `controllers/`, `middleware/`, `services/` and `models/`
+- Local JSON persistence in `backend/data/local.json` for development
+- Supabase production adapter and migrations in `backend/supabase/`
 - Claymorphism is the established visual language
 
-Do not introduce Next.js, replace the frontend framework, or activate Supabase
-without an agreed issue and an updated migration plan.
+Do not introduce Next.js or replace the frontend framework. Supabase work must
+include a migration, server-side authorization review and local fallback tests.
 
 ## Required workflow
 
