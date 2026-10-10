@@ -1,7 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["dist/**", "node_modules/**"]),
+  globalIgnores(["dist/**", ".next/**", "node_modules/**"]),
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     rules: {
