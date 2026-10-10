@@ -8,7 +8,7 @@ The project is intentionally being built with students and the UTAMU community. 
 
 - **Frontend:** React 19, Vite, TypeScript and Lucide icons
 - **Backend:** Node.js, Express and REST endpoints
-- **Database:** Supabase/PostgreSQL
+- **Database:** Local JSON for development; Supabase/PostgreSQL planned for production
 - **Design:** Responsive claymorphism UI
 
 ## Product areas
@@ -27,7 +27,7 @@ The project is intentionally being built with students and the UTAMU community. 
 
 - Node.js 20 or newer
 - npm 10 or newer
-- A Supabase project for persisted data
+- Supabase is optional during the current local-development phase
 
 ### Setup
 
@@ -40,7 +40,9 @@ copy .env.example .env
 
 On macOS or Linux, use `cp .env.example .env` instead of `copy`.
 
-Fill in `.env` with the Supabase URL and keys. Never commit `.env` or a service-role key.
+The local API starts with seeded UTAMU data and writes changes to the ignored
+`server/data/local.json` file. Supabase values can be added later using the
+examples in `.env.example`; never commit `.env` or a service-role key.
 
 Start the frontend and API together:
 
@@ -54,11 +56,13 @@ npm run dev
 Run the production checks:
 
 ```bash
+npm run test
 npm run build
 npm run lint
+npx tsc --noEmit
 ```
 
-## Supabase setup
+## Supabase setup (planned)
 
 The Express API expects an `announcements` table with these initial columns:
 
