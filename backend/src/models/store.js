@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const dataDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../../data");
+const dataDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../data");
 const dataFile = path.join(dataDirectory, "local.json");
 
 const seed = {
