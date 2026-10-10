@@ -96,17 +96,47 @@ The role selector in the prototype is for local UI exploration only. Production 
 5. Include screenshots for visible UI changes.
 6. Never commit secrets, student data or production exports.
 
+AI-assisted contributors must also follow [skills.md](./skills.md), which
+covers product context, safety rules, implementation standards, validation and
+the one-file-per-commit workflow.
+
 Good first contributions include improving the club directory, adding UTAMU event categories, writing Supabase migrations, improving accessibility, and adding tests for API validation.
 
-## Roadmap
+## Roadmap before Supabase
 
-1. Supabase schema migrations and seed data
-2. Supabase Auth with UTAMU student and staff roles
-3. Club ownership and membership workflows
-4. Announcements, event registration and notifications
-5. Groups, direct messaging and moderation
-6. Marketplace and campus services
-7. Offline-friendly mobile experience
+Supabase is intentionally deferred while the product workflows are made
+complete against the local API. The next implementation order is:
+
+1. Replace client-trusted role headers with a signed local session model and
+   server-derived current users.
+2. Add user profiles, persistent sessions, profile editing and account
+   settings.
+3. Add club membership, club ownership, verification workflow and member
+   management.
+4. Complete event workflows: edit/cancel events, attendance limits, duplicate
+   registration prevention and calendar-friendly details.
+5. Add moderation: reporting, review queues, content status, audit history and
+   admin actions.
+6. Add notification preferences and in-app notifications for announcements,
+   event changes, group activity and moderation outcomes.
+7. Add search and filtering across announcements, clubs, events and groups.
+8. Improve groups with membership approval, private-group access checks,
+   message ownership, message moderation and direct messaging foundations.
+9. Add accessibility, low-bandwidth states, pagination and stronger API input
+   validation.
+10. Add marketplace and campus-service workflows only after trust, reporting
+    and moderation foundations are ready.
+
+## Supabase phase
+
+After the local workflows above are stable, migrate resource by resource:
+
+1. Create the relational schema and migrations.
+2. Move authentication to Supabase Auth.
+3. Add server-side role claims and Row Level Security.
+4. Migrate announcements, clubs, events, groups and messages.
+5. Add realtime subscriptions and production notifications.
+6. Run a controlled data migration and remove local demo authorization.
 
 ## Project principles
 
