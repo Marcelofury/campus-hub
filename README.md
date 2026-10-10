@@ -11,6 +11,32 @@ The project is intentionally being built with students and the UTAMU community. 
 - **Database:** Local JSON fallback for development; Supabase/PostgreSQL for configured deployments
 - **Design:** Responsive claymorphism UI
 
+## Project structure
+
+The repository keeps application code inside two top-level folders:
+
+```text
+frontend/
+  index.html
+  src/                 React application, API client and styles
+backend/
+  data/                ignored local development data
+  src/
+    controllers/       HTTP request handlers
+    docs/              OpenAPI definition
+    middleware/        authentication and error middleware
+    models/            local persistence models
+    routes/             API route definitions
+    services/          persistence and authentication services
+  supabase/
+    migrations/        database schema migrations
+  tests/               backend API tests
+```
+
+Root-level files contain shared project configuration, documentation and
+development scripts only. Generated folders such as `dist/` and `.next/` are
+not part of this React/Vite project and must not be committed.
+
 ## Product areas
 
 - Personalized dashboard
