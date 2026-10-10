@@ -1,34 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Campus Hub
 
-## Getting Started
+Campus Hub is an open-source digital community platform for Uganda Technology and Management University (UTAMU). It brings official announcements, clubs, events, sport, student groups and campus conversations into one trusted place.
 
-First, run the development server:
+The project is intentionally being built with students and the UTAMU community. It is currently an early product foundation: the claymorphism frontend is usable as a product prototype, while persistence, authentication and moderation are being connected through the API.
+
+## Stack
+
+- **Frontend:** React 19, Vite, TypeScript and Lucide icons
+- **Backend:** Node.js, Express and REST endpoints
+- **Database:** Supabase/PostgreSQL
+- **Design:** Responsive claymorphism UI
+
+## Product areas
+
+- Personalized dashboard
+- Verified university announcements
+- UTAMU clubs and societies
+- Football, netball, volleyball and community events
+- Student-created groups
+- Admin and super-admin centre
+- Moderation and reporting foundations
+
+## Local development
+
+### Requirements
+
+- Node.js 20 or newer
+- npm 10 or newer
+- A Supabase project for persisted data
+
+### Setup
+
+```bash
+git clone https://github.com/Marcelofury/campus-hub.git
+cd campus-hub
+npm install
+copy .env.example .env
+```
+
+On macOS or Linux, use `cp .env.example .env` instead of `copy`.
+
+Fill in `.env` with the Supabase URL and keys. Never commit `.env` or a service-role key.
+
+Start the frontend and API together:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Frontend: http://localhost:5173
+- API health check: http://localhost:4000/api/health
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the production checks:
 
-## Learn More
+```bash
+npm run build
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Supabase setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The Express API expects an `announcements` table with these initial columns:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | `bigint` or `uuid` | Primary key |
+| `title` | `text` | Required |
+| `category` | `text` | Academic, Sports, Campus, etc. |
+| `source` | `text` | Publishing office or club |
+| `priority` | `text` | Important, Update or Opportunity |
+| `published_at` | `timestamptz` | Defaults to `now()` |
 
-## Deploy on Vercel
+Row Level Security should be enabled before production use. The service role key belongs only on the server. Authentication and user-scoped policies are part of the next implementation milestone.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Roles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Campus Hub currently models three roles:
+
+- **Student:** discover and participate in campus communities
+- **Admin:** publish verified updates and manage moderation
+- **Super admin:** all admin abilities plus platform-level administration
+
+The role selector in the prototype is for local UI exploration only. Production authorization must come from Supabase Auth and server-side role checks.
+
+## Contributing
+
+1. Read the relevant issue before starting work.
+2. Create a focused branch, for example `feat/club-directory`.
+3. Keep changes small and explain the user impact in the pull request.
+4. Run `npm run lint` and `npm run build`.
+5. Include screenshots for visible UI changes.
+6. Never commit secrets, student data or production exports.
+
+Good first contributions include improving the club directory, adding UTAMU event categories, writing Supabase migrations, improving accessibility, and adding tests for API validation.
+
+## Roadmap
+
+1. Supabase schema migrations and seed data
+2. Supabase Auth with UTAMU student and staff roles
+3. Club ownership and membership workflows
+4. Announcements, event registration and notifications
+5. Groups, direct messaging and moderation
+6. Marketplace and campus services
+7. Offline-friendly mobile experience
+
+## Project principles
+
+- Official information must be clearly distinguishable from student content.
+- Student safety, privacy and moderation are core features.
+- The platform should work well on mobile and low-bandwidth connections.
+- Features should be useful before they are clever.
+- Documentation and accessibility are part of the product.
+
+## License
+
+This project is intended to be open source for UTAMU students and contributors. A license will be selected with the UTAMU project community before the first public release.
