@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Bell,
   CalendarDays,
@@ -6,12 +6,10 @@ import {
   ChevronRight,
   CircleHelp,
   ClipboardList,
-  Compass,
   Crown,
   Dribbble,
   Flag,
   Globe2,
-  GraduationCap,
   LayoutDashboard,
   Menu,
   MessageCircle,
