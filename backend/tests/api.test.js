@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { after, before, describe, it } from "node:test";
 
 process.env.NODE_ENV = "test";
-const { default: app } = await import("../backend/src/app.js");
+const { default: app } = await import("../src/app.js");
 
 let server;
 let baseUrl;
