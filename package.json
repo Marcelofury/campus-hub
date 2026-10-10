@@ -16,17 +16,19 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "lucide-react": "^0.468.0"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@typescript-eslint/eslint-plugin": "^8.71.1",
+    "@typescript-eslint/parser": "^8.71.1",
+    "@vitejs/plugin-react": "^5.0.4",
     "concurrently": "^9.2.0",
+    "eslint": "^9",
     "vite": "^7.1.7"
   }
 }
