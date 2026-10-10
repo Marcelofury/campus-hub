@@ -6,9 +6,9 @@ The project is intentionally being built with students and the UTAMU community. 
 
 ## Stack
 
-- **Frontend:** React 19, Vite, TypeScript and Lucide icons
-- **Backend:** Node.js, Express and REST endpoints
-- **Database:** Local JSON for development; Supabase/PostgreSQL planned for production
+- **Frontend:** React 19, Vite, TypeScript and Lucide icons in `frontend/`
+- **Backend:** Node.js, Express and MVC-style REST API in `backend/`
+- **Database:** Local JSON fallback for development; Supabase/PostgreSQL for configured deployments
 - **Design:** Responsive claymorphism UI
 
 ## Product areas
@@ -41,8 +41,10 @@ copy .env.example .env
 On macOS or Linux, use `cp .env.example .env` instead of `copy`.
 
 The local API starts with seeded UTAMU data and writes changes to the ignored
-`server/data/local.json` file. Supabase values can be added later using the
-examples in `.env.example`; never commit `.env` or a service-role key.
+`backend/data/local.json` file. When `SUPABASE_URL` and
+`SUPABASE_SERVICE_ROLE_KEY` are configured, the API uses Supabase Auth and the
+tables in `backend/supabase/migrations/001_initial_schema.sql`. Never commit
+`.env` or a service-role key.
 
 Start the frontend and API together:
 
@@ -62,20 +64,17 @@ npm run lint
 npx tsc --noEmit
 ```
 
-## Supabase setup (planned)
+## Supabase setup
 
-The Express API expects an `announcements` table with these initial columns:
+1. Create a Supabase project.
+2. Run `backend/supabase/migrations/001_initial_schema.sql` in the SQL editor.
+3. Create users in Supabase Auth and add matching rows to `profiles`.
+4. Copy `.env.example` to `.env` and set the project URL and server-only key.
+5. Start the API and confirm `/api/health` reports `"database": "supabase"`.
 
-| Column | Type | Notes |
-| --- | --- | --- |
-| `id` | `bigint` or `uuid` | Primary key |
-| `title` | `text` | Required |
-| `category` | `text` | Academic, Sports, Campus, etc. |
-| `source` | `text` | Publishing office or club |
-| `priority` | `text` | Important, Update or Opportunity |
-| `published_at` | `timestamptz` | Defaults to `now()` |
-
-Row Level Security should be enabled before production use. The service role key belongs only on the server. Authentication and user-scoped policies are part of the next implementation milestone.
+The server uses the service-role key only on the backend. Row Level Security
+is enabled by the migration; expand policies as membership and moderation
+features are added.
 
 ## Roles
 
@@ -102,41 +101,26 @@ the one-file-per-commit workflow.
 
 Good first contributions include improving the club directory, adding UTAMU event categories, writing Supabase migrations, improving accessibility, and adding tests for API validation.
 
-## Roadmap before Supabase
+## Roadmap after Supabase foundation
 
-Supabase is intentionally deferred while the product workflows are made
-complete against the local API. The next implementation order is:
+The Supabase foundation is now in place. The next implementation order is:
 
-1. Replace client-trusted role headers with a signed local session model and
-   server-derived current users.
-2. Add user profiles, persistent sessions, profile editing and account
-   settings.
-3. Add club membership, club ownership, verification workflow and member
-   management.
-4. Complete event workflows: edit/cancel events, attendance limits, duplicate
-   registration prevention and calendar-friendly details.
-5. Add moderation: reporting, review queues, content status, audit history and
-   admin actions.
-6. Add notification preferences and in-app notifications for announcements,
-   event changes, group activity and moderation outcomes.
-7. Add search and filtering across announcements, clubs, events and groups.
-8. Improve groups with membership approval, private-group access checks,
-   message ownership, message moderation and direct messaging foundations.
-9. Add accessibility, low-bandwidth states, pagination and stronger API input
-   validation.
-10. Add marketplace and campus-service workflows only after trust, reporting
+1. Add user profiles, profile editing and account settings.
+2. Add club membership, club ownership, verification workflow and member
+    management.
+3. Complete event workflows: edit/cancel events, attendance limits, duplicate
+    registration prevention and calendar-friendly details.
+4. Add moderation: reporting, review queues, content status, audit history and
+    admin actions.
+5. Add notification preferences and in-app notifications for announcements,
+    event changes, group activity and moderation outcomes.
+6. Add search and filtering across announcements, clubs, events and groups.
+7. Improve groups with membership approval, private-group access checks,
+    message ownership, message moderation and direct messaging foundations.
+8. Add accessibility, low-bandwidth states, pagination and stronger API input
+    validation.
+9. Add marketplace and campus-service workflows only after trust, reporting
     and moderation foundations are ready.
-
-## Supabase phase
-
-After the local workflows above are stable, migrate resource by resource:
-
-1. Create the relational schema and migrations.
-2. Move authentication to Supabase Auth.
-3. Add server-side role claims and Row Level Security.
-4. Migrate announcements, clubs, events, groups and messages.
-5. Add realtime subscriptions and production notifications.
-6. Run a controlled data migration and remove local demo authorization.
 
 ## Project principles
 
