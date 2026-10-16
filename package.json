@@ -9,6 +9,8 @@
     "dev:server": "node --watch backend/src/app.js",
     "build": "vite build frontend",
     "test": "node --test backend/tests/api.test.js",
+    "test:smoke": "node backend/scripts/supabase-smoke.mjs",
+    "seed": "node backend/scripts/seed-supabase.js",
     "start": "node backend/src/app.js",
     "lint": "eslint ."
   },
