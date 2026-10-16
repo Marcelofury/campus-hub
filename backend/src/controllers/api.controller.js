@@ -1,4 +1,4 @@
-import { create, databaseName, list, login, remove, update } from "../services/data-source.js";
+import { create, databaseName, list, login, register, remove, update } from "../services/data-source.js";
 
 const roles = ["student", "admin", "super_admin"];
 const roleRank = { student: 1, admin: 2, super_admin: 3 };
@@ -14,6 +14,18 @@ export async function authLogin(request, response) {
   const result = await login(cleanText(request.body.email).toLowerCase(), cleanText(request.body.password));
   if (!result) return response.status(401).json({ error: "Use a seeded demo UTAMU account." });
   response.json(result);
+}
+
+export async function authRegister(request, response) {
+  const name = cleanText(request.body.name);
+  const email = cleanText(request.body.email).toLowerCase();
+  const password = typeof request.body.password === "string" ? request.body.password : "";
+  if (name.length < 2) return response.status(400).json({ error: "Enter your full name (at least two characters)." });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return response.status(400).json({ error: "Enter a valid email address." });
+  if (password.length < 8) return response.status(400).json({ error: "Password must be at least eight characters." });
+  const result = await register(name, email, password);
+  if (!result) return response.status(409).json({ error: "An account with that email already exists." });
+  response.status(201).json(result);
 }
 
 export const currentUser = (request, response) => response.json({ user: request.user });
