@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm:dev:client\" \"npm:dev:server\"",
     "dev:client": "vite frontend",
     "dev:server": "node --watch backend/src/app.js",
-    "build": "vite build frontend",
+    "build": "vite build frontend --outDir ../dist --emptyOutDir",
     "test": "node --test backend/tests/api.test.js",
     "test:smoke": "node backend/scripts/supabase-smoke.mjs",
     "seed": "node backend/scripts/seed-supabase.js",
@@ -15,6 +15,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.58.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
