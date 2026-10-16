@@ -102,8 +102,36 @@ The server uses the service-role key only on the backend. Row Level Security
 is enabled by the migration; expand policies as membership and moderation
 features are added.
 
-## Roles
+## Deployment
 
+The frontend is a static Vite build and the backend is a Node service, so they
+deploy separately.
+
+**Backend on Render**
+
+1. Create a Blueprint from this repository (Render reads `render.yaml`) or a new
+   Web Service with build command `npm install` and start command `npm start`.
+2. Set the environment variables: `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
+   `SUPABASE_SERVICE_ROLE_KEY` and `CLIENT_ORIGIN` (the deployed frontend URL,
+   for example `https://campus-hub.vercel.app`). Set `NODE_ENV=production` so
+   the development CORS fallback is disabled.
+3. Confirm `https://<your-service>.onrender.com/api/health` reports
+   `"database": "supabase"`. Render provides `PORT` automatically.
+
+**Frontend on Vercel**
+
+1. Import this repository as a Vercel project and keep the root directory at the
+   repository root. `vercel.json` sets the build command and output directory.
+2. Add the environment variable `VITE_API_URL` pointing at the Render API,
+   including the `/api` suffix, for example
+   `https://campus-hub-api.onrender.com/api`.
+3. Deploy, then add the Vercel URL to the backend `CLIENT_ORIGIN` value (comma
+   separate multiple origins).
+
+Seed the production database once with `node backend/scripts/seed-supabase.js`
+and verify the deployment with `node backend/scripts/supabase-smoke.mjs`.
+
+## Roles
 Campus Hub currently models three roles:
 
 - **Student:** discover and participate in campus communities
