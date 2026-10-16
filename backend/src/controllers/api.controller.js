@@ -1,5 +1,5 @@
 import { create, databaseName, list, login, register, remove, update } from "../services/data-source.js";
-import { isAIEnabled, summarizeCampus } from "../services/ai.js";
+import { fallbackSummary, isAIEnabled, summarizeCampus } from "../services/ai.js";
 
 const roles = ["student", "admin", "super_admin"];
 const roleRank = { student: 1, admin: 2, super_admin: 3 };
@@ -97,18 +97,25 @@ export async function adminSummary(request, response) {
   response.json({ data: { role: request.user.role, clubs: clubs.filter((club) => club.verified).length, reports: 0, students: 0, admins: roleRank[request.user.role] === 3 ? 0 : undefined } });
 }
 
-export async function campusBrief(request, response) {
-  if (!isAIEnabled()) return response.status(503).json({ error: "AI campus brief is not configured." });
+const briefCache = { summary: "", generatedAt: 0 };
+const BRIEF_CACHE_MS = Number(process.env.BRIEF_CACHE_MS) || 5 * 60 * 1000;
+
+export async function campusBrief(_request, response) {
+  if (briefCache.summary && Date.now() - briefCache.generatedAt < BRIEF_CACHE_MS) {
+    return response.json({ data: { summary: briefCache.summary, generatedAt: new Date(briefCache.generatedAt).toISOString(), cached: true } });
+  }
+  const [announcements, events, clubs] = await Promise.all([list("announcements"), list("events"), list("clubs")]);
+  if (!isAIEnabled()) {
+    return response.json({ data: { summary: fallbackSummary(announcements, events, clubs), generatedAt: new Date().toISOString(), fallback: true } });
+  }
   try {
-    const [announcements, events, clubs] = await Promise.all([
-      list("announcements"),
-      list("events"),
-      list("clubs"),
-    ]);
     const summary = await summarizeCampus(announcements, events, clubs);
-    response.json({ data: { summary, generatedAt: "Just now" } });
+    briefCache.summary = summary;
+    briefCache.generatedAt = Date.now();
+    response.json({ data: { summary, generatedAt: new Date(briefCache.generatedAt).toISOString() } });
   } catch (error) {
-    response.status(500).json({ error: error.message || "The campus brief could not be generated." });
+    console.warn("Campus brief generation failed:", error.message);
+    response.json({ data: { summary: fallbackSummary(announcements, events, clubs), generatedAt: new Date().toISOString(), fallback: true } });
   }
 }
 
