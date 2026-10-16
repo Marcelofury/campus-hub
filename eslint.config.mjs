@@ -3,7 +3,7 @@ import tsParser from "@typescript-eslint/parser";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default defineConfig([
-  globalIgnores(["dist/**", ".next/**", "node_modules/**"]),
+  globalIgnores(["dist/**", "frontend/dist/**", ".next/**", "node_modules/**"]),
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     languageOptions: {
