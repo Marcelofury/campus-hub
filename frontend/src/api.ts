@@ -9,10 +9,26 @@ export type Group = { id: number; name: string; detail: string; members: number;
 export type Message = { id: number; groupId: number; author: string; body: string; createdAt: string };
 
 const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-let session: { user: User; token: string } | null = null;
+const STORAGE_KEY = "campus-hub-session";
+
+function readStoredSession(): { user: User; token: string } | null {
+  try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? (JSON.parse(raw) as { user: User; token: string }) : null; } catch { return null; }
+}
+
+function persistSession() {
+  try { session ? localStorage.setItem(STORAGE_KEY, JSON.stringify(session)) : localStorage.removeItem(STORAGE_KEY); } catch { /* storage unavailable */ }
+}
+
+let session: { user: User; token: string } | null = readStoredSession();
 
 export function getSession() {
   return session;
+}
+
+export async function validateSession() {
+  if (!session) return null;
+  try { const result = await request<{ user: User }>("/auth/me"); session = { ...session, user: result.user }; persistSession(); return result.user; }
+  catch { session = null; persistSession(); return null; }
 }
 
 export async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -28,18 +44,18 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
 
 export async function login(email: string, password: string) {
   const result = await request<{ user: User; token: string }>("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-  session = result;
+  session = result; persistSession();
   return result.user;
 }
 
 export async function register(name: string, email: string, password: string) {
   const result = await request<{ user: User; token: string }>("/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
-  session = result;
+  session = result; persistSession();
   return result.user;
 }
 
 export function logout() {
-  session = null;
+  session = null; persistSession();
 }
 
 export const getAnnouncements = () => request<{ data: Announcement[] }>("/announcements");

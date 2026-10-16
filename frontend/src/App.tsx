@@ -14,6 +14,7 @@ export default function App() {
   const open = (next: api.Section) => { setSection(next); setMenuOpen(false); setError(""); };
   const onLogin = (next: api.User) => setUser(next);
   const logout = () => { api.logout(); setUser(null); };
+  useEffect(() => { let active = true; void api.validateSession().then((restored) => { if (active) setUser(restored); }); return () => { active = false; }; }, []);
 
   return <div className="app-shell">
     <aside className={menuOpen ? "sidebar sidebar-open" : "sidebar"}>
@@ -25,7 +26,7 @@ export default function App() {
     </aside>
     <main className="main-area">
       <header className="topbar"><button className="menu-toggle clay-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Open navigation">{menuOpen ? <X size={20} /> : <Menu size={20} />}</button><div className="breadcrumb"><span>Tuesday, 24 September</span><strong>{section === "overview" ? "Good morning" : nav.find((item) => item.id === section)?.label ?? "Admin centre"}</strong></div><div className="top-actions"><label className="search-box"><Search size={16} /><input placeholder="Search campus hub" /></label><button className="clay-button notification-button" aria-label="Notifications"><Bell size={18} /><i /></button><div className="avatar avatar-large">{user ? "AO" : "?"}</div></div></header>
-      <div className="content">{error && <div className="error-banner">{error}<button onClick={() => setError("")}><X size={15} /></button></div>}{section === "overview" && <Overview open={open} announcementsError={setError} />}{section === "clubs" && <Clubs user={user} error={setError} />}{section === "events" && <Events user={user} error={setError} />}{section === "groups" && <Groups user={user} error={setError} />}{section === "admin" && user && user.role !== "student" && <Admin user={user} error={setError} />}</div>
+      <div className="content">{error && <div className="error-banner">{error}<button onClick={() => setError("")}><X size={15} /></button></div>}{section === "overview" && <Overview open={open} announcementsError={setError} user={user} />}{section === "clubs" && <Clubs user={user} error={setError} />}{section === "events" && <Events user={user} error={setError} />}{section === "groups" && <Groups user={user} error={setError} />}{section === "admin" && user && user.role !== "student" && <Admin user={user} error={setError} />}</div>
     </main>
     {!user && <Login onLogin={onLogin} />}
   </div>;
@@ -33,14 +34,14 @@ export default function App() {
 
 function Heading({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) { return <div className="page-heading"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{copy}</p></div>; }
 
-function Overview({ open, announcementsError }: { open: (section: api.Section) => void; announcementsError: (error: string) => void }) {
+function Overview({ open, announcementsError, user }: { open: (section: api.Section) => void; announcementsError: (error: string) => void; user: api.User | null }) {
   const [announcements, setAnnouncements] = useState<api.Announcement[]>([]);
   const [brief, setBrief] = useState<string | null>(null);
   const [briefBusy, setBriefBusy] = useState(false);
   const [briefError, setBriefError] = useState("");
   useEffect(() => { api.getAnnouncements().then((result) => setAnnouncements(result.data)).catch((error: Error) => announcementsError(error.message)); }, [announcementsError]);
-  useEffect(() => { void loadBrief(); }, []);
-  const loadBrief = async () => { setBriefBusy(true); setBriefError(""); try { const result = await api.getCampusBrief(); setBrief(result.data.summary); } catch (failure) { setBriefError((failure as Error).message); } finally { setBriefBusy(false); } };
+  const loadBrief = async () => { if (!user) return; setBriefBusy(true); setBriefError(""); try { const result = await api.getCampusBrief(); setBrief(result.data.summary); } catch (failure) { setBriefError((failure as Error).message); } finally { setBriefBusy(false); } };
+  useEffect(() => { if (user) void loadBrief(); }, [user]);
   return <><Heading eyebrow="Your campus, in one clear view" title="Stay close to what matters." copy="Official notices, clubs, sport, events and student conversations — together in one trusted place." /><section className="welcome-card clay-card"><div><span className="status-tag"><CheckCircle2 size={14} /> Campus pulse is clear</span><h2>One home for UTAMU student life.</h2><p>Discover what is happening, join communities and never miss an important campus update.</p><button className="primary-button" onClick={() => open("events")}>Explore this week <ChevronRight size={16} /></button></div><div className="welcome-orbit"><Sparkles size={30} /><strong>UTAMU</strong><span>connect · create · belong</span></div></section><CampusBrief brief={brief} busy={briefBusy} error={briefError} onRefresh={loadBrief} /><div className="stats-grid"><Stat icon={Bell} value={announcements.length} label="Unread updates" tone="lavender" /><Stat icon={CalendarDays} value={8} label="Events this week" tone="peach" /><Stat icon={Users} value={24} label="Clubs to explore" tone="mint" /><Stat icon={MessageCircle} value={36} label="Active groups" tone="blue" /></div><div className="dashboard-grid"><section className="panel clay-card"><Header eyebrow="Verified information" title="Latest announcements" action="Manage" onClick={() => open("admin")} /><div className="announcement-list">{announcements.slice(0, 3).map((item) => <AnnouncementRow item={item} key={item.id} />)}</div></section><section className="panel clay-card"><Header eyebrow="Find your people" title="Community shortcuts" /><div className="shortcut-list"><Shortcut icon={Users} title="Find a club" text="Innovation, tech, culture and more" onClick={() => open("clubs")} /><Shortcut icon={MessageCircle} title="Join a student group" text="Study, create and coordinate" onClick={() => open("groups")} /><Shortcut icon={Trophy} title="See sport & events" text="Football, netball, volleyball" onClick={() => open("events")} /></div></section></div></>;
 }
 
