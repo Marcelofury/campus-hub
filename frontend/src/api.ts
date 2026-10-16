@@ -54,3 +54,4 @@ export const createGroup = (name: string, visibility = "public") => request<{ da
 export const registerForEvent = (id: number) => request<{ data: Event }>(`/events/${id}/register`, { method: "POST" });
 export const getMessages = (id: number) => request<{ data: Message[] }>(`/groups/${id}/messages`);
 export const sendMessage = (id: number, body: string, author: string) => request<{ data: Message }>(`/groups/${id}/messages`, { method: "POST", body: JSON.stringify({ body, author }) });
+export const getCampusBrief = () => request<{ data: { summary: string; generatedAt: string } }>("/ai/campus-brief");
