@@ -106,6 +106,20 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .club-cover { position: relative; display: flex; height: 145px; align-items: center; justify-content: center; color: var(--purple-dark); }
 .club-cover .verified { position: absolute; top: 13px; right: 13px; display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 999px; color: #4f9679; background: #ffffffa8; font-size: 9px; font-weight: 800; }
 .card-body { padding: 20px; }.card-body h2 { min-height: 42px; margin: 7px 0; font: 700 17px/1.2 "Space Grotesk", sans-serif; }.card-body p { min-height: 32px; color: var(--muted); font-size: 11px; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 20px; background: #4d447b66; backdrop-filter: blur(6px); }
+.modal { position: relative; width: min(100%, 430px); padding-bottom: 26px; overflow: hidden; text-align: left; }
+.modal-cover { position: relative; display: flex; height: 150px; align-items: center; justify-content: center; color: var(--purple-dark); }
+.modal-cover .verified { position: absolute; top: 13px; right: 13px; display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 999px; color: #4f9679; background: #ffffffc8; font-size: 9px; font-weight: 800; }
+.modal-close { position: absolute; top: 12px; left: 12px; z-index: 2; display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid #e0daf3; border-radius: 50%; color: var(--ink); background: #ffffffd8; box-shadow: 3px 3px 7px #d4cdec; }
+.modal .eyebrow, .modal h2, .modal-desc, .modal-note { padding-inline: 24px; }
+.modal .eyebrow { display: block; margin-top: 18px; }
+.modal h2 { margin: 6px 0 0; font: 700 22px "Space Grotesk", sans-serif; }
+.modal-desc { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.modal-stats { display: flex; align-items: baseline; gap: 6px; margin: 16px 0; padding: 13px 24px; background: #e7e0ff; }
+.modal-stats strong { color: var(--purple-dark); font: 700 20px "Space Grotesk", sans-serif; }
+.modal-stats span { color: var(--muted); font-size: 11px; }
+.modal-note { margin: 14px 0 0; color: var(--muted); font-size: 12px; }
+.modal .primary-button { margin-inline: 24px; }
 .event-hero { display: flex; align-items: center; justify-content: space-between; min-height: 235px; padding: 30px 36px; color: #fff; background: linear-gradient(125deg, #3d327b, #7965d1 60%, #d8a3c6); }
 .event-hero h2 { max-width: 480px; margin: 17px 0 8px; font: 700 31px/1.03 "Space Grotesk", sans-serif; letter-spacing: -.05em; }.event-hero p { max-width: 450px; color: #e4ddff; font-size: 12px; }
 .event-badge { display: grid; width: 150px; height: 150px; place-content: center; border: 1px solid #ffffff55; border-radius: 50%; color: #fff; text-align: center; box-shadow: inset 0 0 0 12px #ffffff12; }.event-badge strong { font: 700 47px "Space Grotesk", sans-serif; }.event-badge span { font-size: 10px; text-transform: uppercase; letter-spacing: .15em; }
