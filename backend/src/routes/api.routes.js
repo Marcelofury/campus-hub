@@ -5,6 +5,7 @@ import { requireResource, requireRole } from "../middleware/auth.middleware.js";
 const router = Router();
 router.get("/health", controller.health);
 router.post("/auth/login", controller.authLogin);
+router.post("/auth/register", controller.authRegister);
 router.get("/auth/me", requireRole(controller.roles), controller.currentUser);
 router.get("/announcements", controller.listResource("announcements"));
 router.post("/announcements", requireRole(["admin", "super_admin"]), controller.createAnnouncement);
