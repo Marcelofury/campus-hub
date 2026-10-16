@@ -32,6 +32,12 @@ export async function login(email: string, password: string) {
   return result.user;
 }
 
+export async function register(name: string, email: string, password: string) {
+  const result = await request<{ user: User; token: string }>("/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
+  session = result;
+  return result.user;
+}
+
 export function logout() {
   session = null;
 }
