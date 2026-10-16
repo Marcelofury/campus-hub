@@ -14,6 +14,7 @@ const openapi = {
     { name: "Events" },
     { name: "Groups" },
     { name: "Administration" },
+    { name: "AI" },
   ],
   components: {
     securitySchemes: {
@@ -41,6 +42,7 @@ const openapi = {
     "/groups": { get: { tags: ["Groups"], summary: "List groups", responses: { 200: { description: "Group list" } } }, post: { tags: ["Groups"], security: [{ bearerAuth: [] }], summary: "Create a group", responses: { 201: { description: "Created" } } } },
     "/groups/{id}/messages": { get: { tags: ["Groups"], security: [{ bearerAuth: [] }], summary: "List group messages", parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { 200: { description: "Message list" } } }, post: { tags: ["Groups"], security: [{ bearerAuth: [] }], summary: "Send a group message", parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { 201: { description: "Created" } } } },
     "/admin/summary": { get: { tags: ["Administration"], security: [{ bearerAuth: [] }], summary: "Get admin summary", responses: { 200: { description: "Admin summary" }, 403: { description: "Admin access required" } } } },
+    "/ai/campus-brief": { get: { tags: ["AI"], security: [{ bearerAuth: [] }], summary: "Get an AI-generated campus brief", responses: { 200: { description: "Campus brief summary" }, 503: { description: "AI not configured" }, 500: { description: "Generation failed" } } } },
   },
 };
 

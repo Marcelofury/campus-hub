@@ -21,4 +21,5 @@ router.post("/groups", requireRole(controller.roles), controller.createGroup);
 router.get("/groups/:id/messages", requireRole(controller.roles), requireResource("groups"), controller.listMessages);
 router.post("/groups/:id/messages", requireRole(controller.roles), requireResource("groups"), controller.sendMessage);
 router.get("/admin/summary", requireRole(["admin", "super_admin"]), controller.adminSummary);
+router.get("/ai/campus-brief", requireRole(controller.roles), controller.campusBrief);
 export default router;
